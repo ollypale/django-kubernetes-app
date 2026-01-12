@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtualenv
+venv/
+.venv/
+
+# OS/editor
+.DS_Store
+*.swp
+*.swo
+
+# Secrets / kubeconfig
+kubeconfig*.yaml
+*secret*
+.env

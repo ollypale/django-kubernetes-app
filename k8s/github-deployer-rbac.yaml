@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: github-deployer
+  namespace: django-app
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: github-deployer-role
+  namespace: django-app
+rules:
+  # deployments/replicasets/pods — чтобы обновлять образ и смотреть статус
+  - apiGroups: ["apps"]
+    resources: ["deployments", "replicasets"]
+    verbs: ["get", "list", "watch", "patch", "update"]
+  - apiGroups: [""]
+    resources: ["pods", "pods/log", "services", "configmaps", "endpoints"]
+    verbs: ["get", "list", "watch"]
+  # ingress — чтобы читать/применять, если будем apply манифесты
+  - apiGroups: ["networking.k8s.io"]
+    resources: ["ingresses"]
+    verbs: ["get", "list", "watch"]
+  # events — чтобы видеть причины ошибок
+  - apiGroups: [""]
+    resources: ["events"]
+    verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: github-deployer-binding
+  namespace: django-app
+subjects:
+  - kind: ServiceAccount
+    name: github-deployer
+    namespace: django-app
+roleRef:
+  kind: Role
+  name: github-deployer-role
+  apiGroup: rbac.authorization.k8s.io
