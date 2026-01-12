@@ -17,7 +17,7 @@ env:
 
 jobs:
   build-and-deploy:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64]
 
     steps:
       - name: Checkout
@@ -46,12 +46,6 @@ jobs:
         uses: azure/setup-kubectl@v4
         with:
           version: 'v1.34.0'
-
-      - name: Write kubeconfig from secret
-        run: |
-          mkdir -p $HOME/.kube
-          echo "${{ secrets.KUBE_CONFIG }}" > $HOME/.kube/config
-          chmod 600 $HOME/.kube/config
 
       - name: Apply manifests (no secrets)
         run: |
