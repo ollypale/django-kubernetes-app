@@ -30,8 +30,8 @@ jobs:
         uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          username: ollypale
+          password: ${{ secrets.GHCR_PAT }}
 
       - name: Build and push image (tag = commit SHA)
         uses: docker/build-push-action@v6
